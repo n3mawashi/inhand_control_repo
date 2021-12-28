@@ -1,0 +1,4 @@
+{
+  "description": "Disable WinRM with Powershell",
+  "input_method": "stdin"
+}

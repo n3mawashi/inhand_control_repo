@@ -1,0 +1,4 @@
+{
+  "description": "Enable WinRM (insecure) with Powershell",
+  "input_method": "stdin"
+}

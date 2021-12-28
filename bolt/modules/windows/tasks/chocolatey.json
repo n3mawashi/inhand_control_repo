@@ -1,0 +1,15 @@
+{
+  "description": "install Chocolatey with Powershell",
+  "input_method": "stdin",
+  "parameters": {
+    "user": {
+      "description": "The user",
+      "type": "Optional[String[1]]"
+    },
+    "password": {
+      "description": "The password",
+      "type": "Optional[String[1]]",
+      "sensitive": true
+    }
+  }
+}

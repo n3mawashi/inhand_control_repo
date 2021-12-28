@@ -1,0 +1,10 @@
+{
+  "description": "Change HyperV Virtual Machine location",
+  "input_method": "powershell",
+  "parameters": {
+    "Path": {
+      "description": "Absolute Directory of virtual machines location",
+      "type": "String[1]"
+    }
+  }
+}
