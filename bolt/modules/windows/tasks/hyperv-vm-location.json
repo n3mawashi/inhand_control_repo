@@ -5,6 +5,11 @@
     "Path": {
       "description": "Absolute Directory of virtual machines location",
       "type": "String[1]"
+    },
+    "CreatePath": {
+      "description": "Should the path be created",
+      "type": "Boolean",
+      "default_vaule": false
     }
   }
 }
