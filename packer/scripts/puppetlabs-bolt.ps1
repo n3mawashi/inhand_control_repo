@@ -24,8 +24,9 @@ if (-not(Test-Path -Path $installer -PathType Leaf)) {
 try {
   Start-Process -FilePath $env:SYSTEMROOT\system32\msiexec.exe -ArgumentList "/qb /i $env:TEMP\puppet-bolt-x64-latest.msi /log $env:TEMP\puppetlabs-bolt.log" -wait -ErrorAction Stop
   Write-Output "Installation Sucessfull..Installed Powershell Addon"
-  Install-Module PuppetBolt -Confirm:$False -Force -ErrorAction Stop
-  Write-Verbose "Installation of Powershell Addon Sucessful"
+  # seems to hang packer configuration
+  #Install-Module PuppetBolt -Confirm:$False -Force -ErrorAction Stop
+  #Write-Verbose "Installation of Powershell Addon Sucessful"
 }
 catch {
   throw $_.Exception
