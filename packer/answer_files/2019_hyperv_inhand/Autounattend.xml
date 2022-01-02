@@ -7,7 +7,7 @@
             </SetupUILanguage>
             <InputLocale>en-US</InputLocale>
             <SystemLocale>en-AU</SystemLocale>
-            <UILanguage>en-AU</UILanguage>
+            <UILanguage>en-US</UILanguage>
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>en-AU</UserLocale>
         </component>
