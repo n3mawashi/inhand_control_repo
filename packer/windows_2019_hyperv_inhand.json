@@ -117,7 +117,7 @@
     {
       "scripts": [
         "./scripts/vm-guest-tools.ps1",
-        "./scripts/chocolatey.ps1",
+        "./scripts/chocolatey.bat",
         "./scripts/puppetlabs-bolt.ps1"
       ],
       "type": "powershell"
@@ -148,7 +148,7 @@
     "iso_checksum": "sha256:cb28984af65ba1085cd6ade5fdd3d9c75efe7618846513f9ad44f1397a409f85",
     "iso_url": "https://software-download.microsoft.com/download/pr/17763.557.190612-0019.rs5_release_svc_refresh_SERVERHYPERCORE_OEM_x64FRE_en-us.iso",
     "manually_download_iso_from": "https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2019",
-    "output_directory": "{{env `./`}}",
+    "output_directory": "{{env `output_directory`}}",
     "restart_timeout": "5m",
     "winrm_timeout": "2h"
   }
