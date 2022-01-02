@@ -1,15 +1,15 @@
-variable "ad_domain" {
-  description = "AD domain"
-  type        = string
-}
-
-variable "ad_username" {
+# variable "domain" {
+#   description = "AD domain"
+#   type        = string
+# }
+#
+variable "username" {
   description = "AD/hyperv administrator password"
   type        = string
-  default     = 'Administrator'
+  default     = "Administrator"
 }
 
-variable "ad_password" {
+variable "password" {
   description = "AD/hyperv administrator password"
   type        = string
   sensitive   = true
@@ -18,29 +18,32 @@ variable "ad_password" {
 variable "vmpath" {
   description = "Absolute path for virtual machine"
   type        = string
+  default     = "D:\\Hyper-V\\Virtual Machines\\"
 }
 
-variable "vmswtch_name" {
+variable "vswitch_name" {
   description = "Hyperv virtual switch name"
   type        = string
 }
 
-variable "ts_name" {
-  description = "Hyperv virtual switch name"
+variable "ts_hostname" {
+  description = "TS Guest hostname"
   type        = string
 }
 
 variable "ts_ram" {
-  description = "Hyperv virtual switch name"
+  description = "TS Guest RAM size"
   type        = string
+  default     = "34359738368"
 }
 
-variable "ts_vhd_size01" {
-  description = "Hyperv virtual switch name"
+variable "template" {
+  description = "TS Guest template image"
   type        = string
 }
 
 variable "ts_vhd_size02" {
-  description = "Hyperv virtual switch name"
+  description = "TS Guest second drive size"
   type        = string
+  default     = "536870912000" # 500G
 }

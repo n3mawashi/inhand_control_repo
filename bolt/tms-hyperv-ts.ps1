@@ -19,7 +19,7 @@ bolt task run windows::hyperv_configure --target hvserver
 #./packer/make_unattend_iso.ps1
 
 if (-not (test-item -path $packer_out_dir)) {
-  emove-Item -Recurse -Force $packer_out_dir
+  Remove-Item -Recurse -Force $packer_out_dir
 }
 #packer validate
 packer build --only=hyperv-iso `
@@ -35,8 +35,7 @@ terraform plan `
   -var vswitch_name="mgmt" `
   -var ts_hostname="TMS-S-RDS01" `
   -var vmpath="D:\\Hyper-V\\Virtual Machines\\" `
-  -var vmtemplate="D:\\Templates\\windows_2019_hyperv.box" `
-  -var ts_ram=""
+  -var template="D:\\Templates\\windows_2019_hyperv.box"
 
 # 3.a because terraform
 # 4. Run bolt to configure RDS server further.
