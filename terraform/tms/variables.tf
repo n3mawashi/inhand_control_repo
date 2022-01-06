@@ -18,7 +18,7 @@ variable "password" {
 variable "vmpath" {
   description = "Absolute path for virtual machine"
   type        = string
-  default     = "D:\\Hyper-V\\Virtual Machines\\"
+  default     = "D:\\Hyper-V"
 }
 
 variable "vswitch_name" {
@@ -34,7 +34,7 @@ variable "ts_hostname" {
 variable "ts_ram" {
   description = "TS Guest RAM size"
   type        = string
-  default     = "34359738368"
+  default     = "34359738368" #32Gb
 }
 
 variable "template" {
@@ -45,5 +45,5 @@ variable "template" {
 variable "ts_vhd_size02" {
   description = "TS Guest second drive size"
   type        = string
-  default     = "536870912000" # 500G
+  default     = "549755813888" # 500G
 }

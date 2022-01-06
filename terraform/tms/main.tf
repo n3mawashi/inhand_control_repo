@@ -1,4 +1,5 @@
 # source https://github.com/taliesins/terraform-provider-hyperv/blob/master/examples/vm-from-scratch/main.tf
+# https://github.com/taliesins/terraform-provider-hyperv/issues/91
 terraform {
   required_providers {
     hyperv = {
@@ -15,30 +16,19 @@ terraform {
 provider "hyperv" {
   user     = var.username
   password = var.password
+  https    = false
+  port     = 5985
 }
-
-# provider "windowsnetwork" {
-#    host = <ad_system>
-#    port = "5986"
-#    endpoint = "wsman"
-#    username = ""
-#    password = ""
-# }
-
-# This should likely go in bolt configuration
-# resource "hyperv_network_switch" "network_switch" {
-#   name = var.vswitch_name
-#   switch_type = external
-# }
 
 #Primary disk
-resource "hyperv_vhd" "ts_hostname-vhdx-01" {
+resource "hyperv_vhd" "ts_host-vhdx-01" {
+  # D:\\Hyper-V\\tms-s-rds\\Virutal Disks\\tms-s-rds-01.vhdx
+  path   = "${var.vmpath}\\${var.ts_hostname}\\Virtual Disks\\${var.ts_hostname}-boot.vhdx" #Needs to be absolute path
   source = var.template
-  path   = "${var.vmpath}${var.ts_hostname}\\Virtual Disks\\" #Needs to be absolute path
 }
 #secondary disk
-resource "hyperv_vhd" "ts_hostname-vhdx-02" {
-  path = "${var.vmpath}${var.ts_hostname}\\Virtual Disks\\" #Needs to be absolute path
+resource "hyperv_vhd" "ts_host-vhdx-02" {
+  path = "${var.vmpath}\\${var.ts_hostname}\\Virtual Disks\\${var.ts_hostname}-02.vhdx" #Needs to be absolute path
   size = var.ts_vhd_size02
 }
 
@@ -54,42 +44,53 @@ resource "hyperv_machine_instance" "ts_host" {
   automatic_start_delay  = 0
   automatic_stop_action  = "Save"
   checkpoint_type        = "Production"
+  smart_paging_file_path = "${var.vmpath}\\${var.ts_hostname}\\smartpaging"
+  snapshot_file_location = "${var.vmpath}\\${var.ts_hostname}\\snapshots"
 
   vm_processor {
     expose_virtualization_extensions = true
   }
 
   integration_services = {
-    Shutdown = true
-    VSS      = true
+    "Time Synchronization" = false
+    "Shutdown"             = true
+    "VSS"                  = true
   }
 
   network_adaptors {
     name         = "lan"
     switch_name  = var.vswitch_name
     wait_for_ips = false
+    router_guard = "On"
+    dhcp_guard   = "On"
+    # turn off SR-IOV since NIC's don't support it.
+    allow_teaming = "Off"
+    vmq_weight    = 0
+    iov_weight    = 0
   }
 
   hard_disk_drives {
-    controller_type           = "Scsi"
-    path                      = "hyperv_vhd.ts_hostname-vhdx-02.path"
+    controller_type           = "Ide"
+    path                      = hyperv_vhd.ts_host-vhdx-01.path
     controller_number         = 0
     controller_location       = 0
     override_cache_attributes = "WriteCacheEnabled"
   }
 
   hard_disk_drives {
-    controller_type           = "Scsi"
-    path                      = "hyperv_vhd.ts_hostname-vhdx-02.path"
+    controller_type           = "Ide"
+    path                      = hyperv_vhd.ts_host-vhdx-02.path
     controller_number         = 0
     controller_location       = 1
     override_cache_attributes = "WriteCacheEnabled"
-
   }
 
   dvd_drives {
     controller_number   = 1
     controller_location = 0
-    #path = "ubuntu.iso"
   }
+}
+
+output "ips" {
+  value = hyperv_machine_instance.ts_host.network_adaptors[0].ip_addresses
 }
