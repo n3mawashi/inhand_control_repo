@@ -51,7 +51,9 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/INDEX</Key>
-                            <Value>1</Value>
+                            <!-- Serverstandardcore = 1, Serverstandard desktop = 2, 3 DC core, 4 DC desktop  -->
+                            <!--- https://techcommunity.microsoft.com/t5/windows-server-insiders/server-2019-no-desktop-version-for-unattended/m-p/175797 -->
+                            <Value>2</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
