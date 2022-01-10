@@ -1,15 +1,12 @@
 # source https://github.com/taliesins/terraform-provider-hyperv/blob/master/examples/vm-from-scratch/main.tf
 # https://github.com/taliesins/terraform-provider-hyperv/issues/91
+
 terraform {
   required_providers {
     hyperv = {
       version = "1.0.3"
       source  = "registry.terraform.io/taliesins/hyperv"
     }
-    # windowsnetwork = {
-    #   version = "0.2"
-    #   source  = "github.com/claudusd/terraform-windows-network"
-    # }
   }
 }
 
@@ -58,9 +55,10 @@ resource "hyperv_machine_instance" "ts_host" {
   }
 
   network_adaptors {
-    name         = "lan"
-    switch_name  = var.vswitch_name
-    wait_for_ips = false
+    name        = "lan"
+    switch_name = var.vswitch_name
+    # needed for remote-exec
+    wait_for_ips = true
     router_guard = "On"
     dhcp_guard   = "On"
     # turn off SR-IOV since NIC's don't support it.
@@ -88,6 +86,27 @@ resource "hyperv_machine_instance" "ts_host" {
   dvd_drives {
     controller_number   = 1
     controller_location = 0
+  }
+  # This is a hack to and needs to be moved to cloudbase-init or HKP or something.
+  provisioner "remote-exec" {
+    inline = [
+      <<-EOF
+        rem this is a batch script.
+        query session
+        whoami /all
+        ver
+        PowerShell "Get-Disk | Select-Object Number,PartitionStyle,Size | Sort-Object Number"
+        PowerShell "Get-Volume | Sort-Object DriveLetter,FriendlyName"
+        PowerShell "Rename-Computer -NewName ${var.ts_hostname} -Restart:$false"
+        EOF
+    ]
+    connection {
+      type     = "winrm"
+      user     = var.winrm_username
+      password = var.winrm_password
+      host     = self.network_adaptors[0].ip_addresses[0] # see https://github.com/dmacvicar/terraform-provider-libvirt/issues/660
+      timeout  = "1h"
+    }
   }
 }
 

@@ -1,8 +1,9 @@
-# variable "domain" {
-#   description = "AD domain"
-#   type        = string
-# }
-#
+variable "domain" {
+  description = "AD domain"
+  type        = string
+  default     = "EXAMPLE"
+}
+
 variable "username" {
   description = "AD/hyperv administrator password"
   type        = string
@@ -14,6 +15,20 @@ variable "password" {
   type        = string
   sensitive   = true
 }
+
+variable "winrm_username" {
+  description = "guest administrator password"
+  type        = string
+  default     = "vagrant"
+}
+
+variable "winrm_password" {
+  description = "guest administrator password"
+  type        = string
+  sensitive   = true
+  default     = "vagrant"
+}
+
 
 variable "vmpath" {
   description = "Absolute path for virtual machine"

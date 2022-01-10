@@ -7,11 +7,16 @@ TODO:
 1.b add git hook to decrypt on the server.
 2. convert to bolt plan
 3. write UAT tests inspec
-3. take over hte world
+3. take over the world
 #>
-$iso_dir = D:\ISO\
-$packer_output_dir = D:\Templates\windows_2019_hyperv-iso
+# get hash array from secrets.auto.tfvars
+[string[]]$autoftvars = Get-Content -Path 'secrets.auto.tfvars'
 
+$iso_dir = "D:\ISO"
+$packer_output_dir = "D:\Templates\windows_2019_hyperv-iso"
+$adDHCP = $true
+$adDHCPserver = '10.10.10.10'
+$adServer - '10.10.10.1'
 # 1. run bolt tasks/plan to confirm hyper is install/setup as we expect
 bolt task run windows::hyperv_install --target hvserver
 bolt task run windows::hyperv_configure --target hvserver
@@ -33,7 +38,9 @@ packer build --only=hyperv-iso `
   windows_2019_hyperv_inhand.json
 
 # AD powershell to add DHCP entry with static MAC to provide IP. DNS entry to complement
-
+if ($adDHCP) {
+   Add-DhcpServerv4Lease -Computer $ad-server -IPAddress $ts_ipaddress -ScopeId $ad_DHCP_scope -ClientId $ts_MAC -HostName "$hostname.$domain"
+}
 # 3. Run terraform apply to create VM and import packer image.
 terraform init
 terraform validate
