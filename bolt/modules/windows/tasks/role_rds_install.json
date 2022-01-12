@@ -1,0 +1,30 @@
+{
+  "puppet_task_version": 1,
+  "files": [
+   "powershell_task_helper/files/BoltPwshHelper/"
+ ],
+  "description": "Installed RDS roles in the targeted system.",
+  "input_method": "powershell",
+  "supports_noop": true,
+  "parameters": {
+    "roles": {
+      "description": "The name of the Roles/Features to be installed.",
+      "type": "Variant[Array[String],String]"
+    },
+    "includesubfeatures": {
+      "description": "Install ALL Sub Features.",
+      "type": "Optional[Boolean]",
+      "default": "false"
+    },
+    "includetools": {
+      "description": "Install Management tools.",
+      "type": "Optional[Boolean]",
+      "default": "false"
+    },
+    "restart": {
+      "description": "Immediately restart the server after the install if a role/feature requires.",
+      "type": "Optional[Boolean]",
+      "default": "false"
+    }
+  }
+}

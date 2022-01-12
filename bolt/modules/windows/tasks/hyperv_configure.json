@@ -2,11 +2,11 @@
   "description": "Change HyperV Virtual Machine location",
   "input_method": "powershell",
   "parameters": {
-    "Path": {
+    "path": {
       "description": "Absolute Directory of virtual machines location",
       "type": "String[1]"
     },
-    "CreatePath": {
+    "createpath": {
       "description": "Should the path be created",
       "type": "Boolean",
       "default_vaule": false

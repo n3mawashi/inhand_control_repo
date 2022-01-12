@@ -16,6 +16,16 @@ provider "hyperv" {
   https    = false
   port     = 5985
 }
+# vswitch
+resource "hyperv_network_switch" "vm_network_switch" {
+  name                           = "VMdata-10G"
+  allow_management_os            = false
+  enable_iov                     = true
+  net_adapter_names              = ["VMdata"]
+  switch_type                    = "external"
+  default_queue_vmmq_enabled     = true
+  default_queue_vmmq_queue_pairs = 32
+}
 
 #Primary disk
 resource "hyperv_vhd" "ts_host-vhdx-01" {
